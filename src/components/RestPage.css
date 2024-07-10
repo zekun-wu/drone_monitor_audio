@@ -1,0 +1,49 @@
+/* RestPage.css */
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .rest-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align to the top */
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #f8f8f8; /* Light background color */
+    color: #333; /* Darker text color for better contrast */
+    text-align: center;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Clean, modern font */
+    padding-top: 2rem; /* Add some padding to the top */
+  }
+  
+  .countdown-text {
+    font-size: 5rem; /* Larger font size */
+    font-weight: 300;
+    transition: transform 0.3s ease-in-out; /* Smooth transition */
+  }
+  
+  .static-text {
+    font-size: 2rem;
+    font-weight: 300;
+    margin-top: 1rem; /* Space between countdown and static text */
+  }
+  
+  /* Smooth transition effect */
+  @keyframes fade-in-out {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.05);
+    }
+  }
+  

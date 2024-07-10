@@ -1,0 +1,162 @@
+.drone-monitor-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100%;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  grid-template-rows: 1fr 1fr;   /* Two rows */
+  gap: 1rem; /* Reduce gap between the blocks */
+  width: 100%; /* Full width */
+  height: 90%; /* Full height */
+  margin-bottom: 1rem;
+}
+
+.map-container {
+  width: 50%;
+  height: 80%;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+.drone-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, #f5f7fa, #e4e6e9);
+  flex: 1;
+  width: 50%; /* Adjust width to be smaller */
+  height: 80%; /* Adjust height to be smaller */
+  margin: auto; /* Center the block within the grid cell */
+}
+
+.drone-number {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-top: 1.2rem;
+  margin-left: 3rem;
+  align-self: flex-start;
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2rem; 
+  width: 100%;
+}
+
+.icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  height: 80px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-radius: 10%;
+  margin-bottom: 2px;
+  border: 2px solid transparent;
+}
+
+.icon-text {
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 2px;
+  color: #4a4a4a;
+  white-space: nowrap;
+}
+
+.drone-custom-icon {
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+
+.drone-icon-container {
+  position: relative;
+}
+
+.drone-icon {
+  width: 50%;
+  height: 50%;
+}
+
+.drone-icon-number {
+  position: absolute;
+  bottom: 100%;
+  left:27%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: bold;
+  color:black;
+}
+
+@media screen and (max-width: 1024px) {
+  .container {
+    padding: calc(0.5rem / 3);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .icon {
+    width: 30px;
+    height: 30px;
+  }
+  .icon-text {
+    font-size: 0.6rem;
+  }
+  .drone-block {
+    padding: 0.2rem;
+  }
+}
+  
+@media screen and (max-width: 480px) {
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+  .icon-text {
+    font-size: 0.5rem;
+  }
+  .drone-block {
+    padding: 0.1rem;
+    width: 40rem; /* Set a fixed width */
+    height: 30rem; /* Set a fixed height */
+  }
+}
+
+/* DroneMonitor.css */
+@keyframes blink-red {
+  0% {
+    background-color: red;
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: red;
+  }
+}
+
+.blink-red {
+  animation: blink-red 1s infinite;
+}

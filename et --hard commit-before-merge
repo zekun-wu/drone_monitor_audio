@@ -1,0 +1,38 @@
+[33m960f00e[m[33m ([m[1;36mHEAD[m[33m)[m HEAD@{0}: commit: update
+[33m4d4bc2e[m HEAD@{1}: commit (merge): Resolve merge conflits
+[33mbe360da[m HEAD@{2}: commit: update
+[33m224c81a[m HEAD@{3}: rebase (continue): smallscreen
+[33md4e5b31[m HEAD@{4}: pull --rebase origin main (pick): 'questions'
+[33m1ff64ea[m HEAD@{5}: pull --rebase origin main (pick): 'taskchange'
+[33m81376cf[m HEAD@{6}: pull --rebase origin main (pick): 'update'
+[33mcadb9eb[m HEAD@{7}: pull --rebase origin main (pick): First commit
+[33m5ce7ec6[m HEAD@{8}: pull --rebase origin main (pick): anther quick adjust on map
+[33m2e3d4fc[m HEAD@{9}: pull --rebase origin main (pick): adjust map
+[33m85970ff[m HEAD@{10}: pull --rebase origin main (pick): fix bug
+[33me48a246[m HEAD@{11}: pull --rebase origin main (pick): update the map
+[33mb4c4725[m HEAD@{12}: pull --rebase origin main (pick): update the simulation and icons
+[33mf5f582b[m HEAD@{13}: pull --rebase origin main (pick): update data again
+[33mfafb5d0[m HEAD@{14}: pull --rebase origin main (pick): data update
+[33md289ffe[m HEAD@{15}: pull --rebase origin main (pick): env change
+[33m511cdad[m HEAD@{16}: pull --rebase origin main (pick): change env
+[33m0d84f5c[m HEAD@{17}: pull --rebase origin main (pick): init
+[33m8ad68b6[m HEAD@{18}: pull --rebase origin main (pick): setup gh-pages
+[33mff9b69f[m HEAD@{19}: pull --rebase origin main (pick): initial commit
+[33mc11a255[m HEAD@{20}: pull --rebase origin main (pick): Initialize project using Create React App
+[33m3c342ac[m HEAD@{21}: pull --rebase origin main (start): checkout 3c342ac71261b6e0d04e07ac7390f002ff0b3063
+[33m36b4b38[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m HEAD@{22}: checkout: moving from main to main
+[33m36b4b38[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m HEAD@{23}: commit (merge): Resolved merge conflict in README.md
+[33m8c612ab[m HEAD@{24}: checkout: moving from main to main
+[33m8c612ab[m HEAD@{25}: Branch: renamed refs/heads/master to refs/heads/main
+[33m8c612ab[m HEAD@{27}: commit: Initial commit
+[33m55ddb1a[m HEAD@{28}: commit: bug
+[33mf5b0acd[m HEAD@{29}: commit: data
+[33m5458d48[m HEAD@{30}: commit: data
+[33mca9f6c3[m HEAD@{31}: commit: 'data'
+[33m6555ff8[m HEAD@{32}: commit: 'update'
+[33m37ad385[m HEAD@{33}: commit: 'update'
+[33m197f873[m HEAD@{34}: commit (merge): Resolved merge conflict in DroneMonitor.css
+[33m6dc73af[m HEAD@{35}: commit: 'questions'
+[33m1948750[m HEAD@{36}: commit: 'taskchange'
+[33mc0e21c5[m HEAD@{37}: commit: 'update'
+[33m2199371[m HEAD@{38}: clone: from https://github.com/zekun-wu/drone_interface_demo4.git
