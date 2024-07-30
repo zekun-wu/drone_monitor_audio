@@ -1,48 +1,65 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-const Audio = ({ alarm, taskStarted, sceneCounter, currentIndex, interval }) => {
-  const [jsonData, setJsonData] = useState([]);
-  const playedAlarms = useRef(new Set());
-  const alarmTimestamps = [120, 168, 216, 264, 312, 360];
-
-  // Load the JSON file
-  useEffect(() => {
-    const loadJson = async () => {
-      const response = await fetch(`${process.env.PUBLIC_URL}/data/alarm_high.json`);
-      const data = await response.json();
-      setJsonData(data);
-    };
-
-    loadJson();
-  }, []);
+const Audio = ({ alarms, alarmInfo, currentIndex }) => {
+  const lastTriggeredIndex = useRef(null); // Track the last index at which the alarm was triggered
 
   useEffect(() => {
-    const speakAlarm = () => {
-      const utterance = new SpeechSynthesisUtterance('alarm');
-      utterance.rate = 0.5; // Adjust the rate to slow down the speech
-      window.speechSynthesis.speak(utterance);
-    };
+    if (!alarmInfo) return;
 
-    if (alarm !== 2 && alarm !== 3) {
-      return;
-    }
+    const [alarmType, noCritical] = alarmInfo;
+    const alarmTimestamps = [noCritical * 24, (noCritical + 2) * 24, (noCritical + 4) * 24, (noCritical + 6) * 24];
 
-    const timestampMod = currentIndex % 360;
+    // console.log("Current index:", currentIndex);
+    // console.log("Alarm info:", alarmInfo);
+    // console.log("Alarm timestamps:", alarmTimestamps);
+    // console.log("Alarm type:", alarmType);
 
-    if (alarmTimestamps.includes(timestampMod)) {
-      const alarmKey = `${sceneCounter}-${currentIndex}`;
-      if (!playedAlarms.current.has(alarmKey)) {
+    if ((alarmType === 'A' || alarmType === 'V/A') && alarmTimestamps.includes(currentIndex) && lastTriggeredIndex.current !== currentIndex) {
+      let droneNumber = null;
+      let iconType = null;
 
-        const matchedRow = jsonData.find(row => parseInt(row['Task No']) === sceneCounter && parseInt(row['Interval']) === interval);
-        if (matchedRow && parseInt(matchedRow['Alarm']) !== 0) {
-          speakAlarm();
-          playedAlarms.current.add(alarmKey);
+      // Find the drone with the alarm and determine the icon type
+      for (let i = 0; i < alarms.length; i++) {
+        if (alarms[i] !== 0) {
+          droneNumber = i + 1; // Drone numbers are 1-based
+          switch (alarms[i]) {
+            case 1:
+              iconType = 'low battery';
+              break;
+            case 2:
+              iconType = 'extreme wind';
+              break;
+            case 3:
+              iconType = 'rotor off';
+              break;
+            case 4:
+              iconType = 'no-fly zone';
+              break;
+            default:
+              console.log("No valid alarm found.");
+              return;
+          }
+          break; // Exit the loop once the first non-zero alarm is found
         }
       }
-    }
-  }, [alarm, taskStarted, sceneCounter, currentIndex, interval, jsonData]);
 
-  return null;
+      if (droneNumber && iconType) {
+        const text = `Drone ${droneNumber}, ${iconType}.`;
+        console.log("Speaking text:", text);
+        speak(text);
+        lastTriggeredIndex.current = currentIndex; // Update the last triggered index
+      }
+    }
+  }, [alarms, alarmInfo, currentIndex]);
+
+  const speak = (text) => {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    synth.speak(utterance);
+    console.log("Speaking:", text);
+  };
+
+  return null; // This component does not render anything visually
 };
 
 export default Audio;

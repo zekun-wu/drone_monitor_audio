@@ -5,11 +5,11 @@ export function Login({ onLogin }) {
   const [gender, setGender] = useState('');
   const [age, setAge] = useState('');
   const [experience, setExperience] = useState('');
-  const [alarm, setAlarm] = useState(0);
+  // const [alarm, setAlarm] = useState(0);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onLogin({ username, gender, age, experience, alarm: parseInt(alarm) });
+    onLogin({ username, gender, age, experience});
   };
 
   return (
@@ -39,7 +39,7 @@ export function Login({ onLogin }) {
             <input type="number" value={experience} onChange={e => setExperience(e.target.value)} required min="1" max="5" />
             <p>Note: 1 for no experience and 5 for full experience</p>
           </div>
-          <div>
+          {/* <div>
             <label>Alarm: </label>
             <select value={alarm} onChange={e => setAlarm(e.target.value)} required>
               <option value="0">None</option>
@@ -47,7 +47,7 @@ export function Login({ onLogin }) {
               <option value="2">Audio</option>
               <option value="3">Mixed</option>
             </select>
-          </div>
+          </div> */}
           <div className="button-wrapper">
             <button type="submit">Log In</button>
           </div>

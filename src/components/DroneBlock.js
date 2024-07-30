@@ -20,75 +20,52 @@ import altitudeIcon from './icons/altitude.png';
 import distanceIcon from './icons/distance.png';
 import elapsedIcon from './icons/elapsed.png';
 
-const DroneBlock = ({ droneData, droneNumber, isFrozen, latestData, alarm, alarmInfo, sceneCounter, interval }) => {
-
+const DroneBlock = ({ droneNumber, isFrozen, latestData, alarm, alarmInfo, sceneCounter, interval }) => {
   const [isBlinking, setIsBlinking] = useState(false);
 
   useEffect(() => {
-    let blinkInterval;
-    if (alarm === 1 || alarm === 3) {
-      blinkInterval = setInterval(() => {
-        setIsBlinking((prev) => !prev);
-      }, 1000); // Toggle every second
+    let criticalTime = Number(alarmInfo[1]);
+    if (isNaN(criticalTime)) {
+      criticalTime = 0;
+    }
+    criticalTime = criticalTime * 24 - 1;
+
+    const intervals = [
+      { start: criticalTime, end: criticalTime + 24 },
+      { start: criticalTime + 24 * 2, end: criticalTime + 24 * 3 },
+      { start: criticalTime + 24 * 4, end: criticalTime + 24 * 5 },
+      { start: criticalTime + 24 * 6, end: criticalTime + 24 * 7 },
+      { start: criticalTime + 24 * 8, end: criticalTime + 24 * 9 },
+    ];
+  
+    const shouldBlink = intervals.some(interval => latestData['time'] > interval.start && latestData['time'] < interval.end);
+  
+
+    if (alarm !== 0 && (alarmInfo[0] === "V" || alarmInfo[0] === "V/A") && shouldBlink) {
+      setIsBlinking(true)
     } else {
       setIsBlinking(false);
     }
 
-    return () => {
-      clearInterval(blinkInterval);
-    };
-  }, [alarm]);
-
-  // Determine which icons to highlight based on alarmInfo
-  const alarmRow = alarmInfo?.find(row => row["Task No"] === sceneCounter && row["Interval"] === interval);
-  const highlightIcon = alarmRow ? alarmRow[`D${droneNumber}_`] : 0;
+  }, [alarm, alarmInfo, latestData]);
 
   const weatherIcons = [
-    { value: "sunny", icon: sunIcon, highlight: null },
-    { value: "rainy", icon: rainIcon, highlight: null },
-    { value: "snowy", icon: snowIcon, highlight: null },
-    { value: "foggy", icon: fogIcon, highlight: null },
-    { value: "extreme", icon: extremeIcon, highlight: 1 },
-  ];
-
-  const zoneIcons = [
-    { value: "no-fly zone", icon: noflyIcon, highlight: 1 },
-    { value: "fly zone", icon: flyIcon, highlight: null },
+    { value: "sunny", icon: sunIcon },
+    { value: "rainy", icon: rainIcon },
+    { value: "snowy", icon: snowIcon },
+    { value: "foggy", icon: fogIcon },
+    { value: "extreme", icon: extremeIcon },
   ];
 
   const icons = [
-    {
-      name: 'battery',
-      icon: batteryIcon,
-    },
-    {
-      name: 'wind',
-      icon: windIcon,
-    },
-    {
-      name: 'horizontal_speed',
-      icon: horizontalIcon,
-    },
-    {
-      name: 'rotor',
-      icon: rotorIcon,
-    },
-    {
-      name: 'zone',
-      icon: flyIcon,
-    },
-    {
-      name: 'vertical_speed',
-      icon: verticalIcon,
-    },
-    {
-      name: 'altitude',
-      icon: altitudeIcon,
-    },
-    {
-      name: 'distance',
-      icon: distanceIcon,
-    }
+    { name: 'battery', icon: batteryIcon },
+    { name: 'wind', icon: windIcon },
+    { name: 'horizontal_speed', icon: horizontalIcon },
+    { name: 'rotor', icon: rotorIcon },
+    { name: 'zone', icon: flyIcon },
+    { name: 'vertical_speed', icon: verticalIcon },
+    { name: 'altitude', icon: altitudeIcon },
+    { name: 'distance', icon: distanceIcon }
   ];
 
   const iconHighlightMapping = {
@@ -101,96 +78,82 @@ const DroneBlock = ({ droneData, droneNumber, isFrozen, latestData, alarm, alarm
   const getIconValue = useMemo(() => {
     const iconValues = {
       rotor: () => {
-        const value = latestData.zone === 1 ? 'working' : (latestData.rotor === 0 ? 'off' : 'unknown');
-        const highlight = latestData.rotor === 0 ? 1 : null;
-        return { value, highlight };
+        const value = latestData.rotor === 1 ? 'working' : (latestData.rotor === 0 ? 'off' : 'unknown');
+        return { value };
       },
       weather: () => {
-        const icon = weatherIcons[latestData.weather] || { value: 'unknown', highlight: latestData.weather === 4 ? 1 : null };
+        const icon = weatherIcons[latestData.weather] || { value: 'unknown' };
         return icon;
       },
       wind: () => {
         const value = latestData.wind ? (latestData.wind).toFixed(1) + 'm/s' : 'unknown';
-        const highlight = (100 * latestData.wind).toFixed(0) > 1000 ? 1 : null;
-        return { value, highlight };
+        return { value };
       },
       battery: () => {
         const value = latestData.battery ? (100 * latestData.battery).toFixed(0) + '%' : 'unknown';
-        const highlight = (100 * latestData.battery).toFixed(0) <= 10 ? 1 : null;
-        return { value, highlight };
+        return { value };
       },
       horizontal_speed: () => {
         const value = latestData.horizontal_speed ? (latestData.horizontal_speed).toFixed(0) + 'm/s' : 'unknown';
-        return { value, highlight: null };
+        return { value };
       },
       vertical_speed: () => {
         const value = latestData.vertical_speed !== undefined && latestData.vertical_speed !== null ? (latestData.vertical_speed).toFixed(1) + 'm/s' : 'unknown';
-        return { value, highlight: null };
+        return { value };
       },
       altitude: () => {
         const value = latestData.altitude !== undefined && latestData.altitude !== null ? (latestData.altitude).toFixed(0) + 'm' : 'unknown';
-        return { value, highlight: null };
+        return { value };
       },
       distance: () => {
         const value = latestData.distance ? latestData.distance.toFixed(0) + 'm' : 'unknown';
-        return { value, highlight: null };
+        return { value };
       },
       time: () => {
         const value = latestData.time ? latestData.time.toFixed(0) + 's' : 'unknown';
-        return { value, highlight: null };
+        return { value };
       },
       camera: () => {
         const value = latestData.camera === 1 ? 'working' : 'MALF';
-        const highlight = latestData.camera === 0 ? 1 : null;
-        return { value, highlight };
+        return { value };
       },
       landing: () => {
         const value = latestData.landing === 1 ? 'possible' : 'not possible';
-        const highlight = latestData.landing === 0 ? 1 : null;
-        return { value, highlight };
+        return { value };
       },
       zone: () => {
         const value = latestData.zone === 1 ? 'fly zone' : (latestData.zone === 0 ? 'no-fly' : 'unknown');
-        const highlight = latestData.zone === 0 ? 1 : null;
-        return { value, highlight };
+        return { value };
       },
     };
 
     return (iconKey) => {
       const iconValue = iconValues[iconKey];
       if (!iconValue) {
-        return { value: 'unknown', highlight: null };
+        return { value: 'unknown' };
       }
       const result = iconValue();
       if (result.value === undefined) {
-        return { value: 'unknown', highlight: null };
+        return { value: 'unknown' };
       }
       return result;
     };
   }, [latestData]);
 
   const IconComponent = ({ iconData }) => {
-    const { name, getIcon, icon } = iconData;
-    const { value, highlight } = getIconValue(name);
+    const { name, icon } = iconData;
+    const { value } = getIconValue(name);
 
-    const prevHighlightRef = useRef();
-    const [lastAlarmTime, setLastAlarmTime] = useState(0);
+    const isHighlighted = iconHighlightMapping[alarm] === name && isBlinking;
 
-    useEffect(() => {
-      prevHighlightRef.current = highlight;
-    });
-
-    const prevHighlight = prevHighlightRef.current;
-    const timestampMod = (latestData.time+1) % 360;
-    console.log('timestampMod',timestampMod )
 
     return (
       <div className="icon-wrapper">
         <div
-          className={`icon ${iconHighlightMapping[highlightIcon] === name && isBlinking && timestampMod >=120? 'blink-red' : ''}`}
+          className={`icon ${isHighlighted ? 'blink-yellow' : ''} `}
           title={`${name}: ${latestData[name] || 0}`}
           style={{
-            backgroundImage: `url(${getIcon ? getIcon(latestData[name]) : icon})`,
+            backgroundImage: `url(${icon})`,
           }}
         ></div>
         <span className="icon-text">{value}</span>
