@@ -22,7 +22,9 @@ const GridMap = ({ onGridSubmit, taskNo, interval }) => {
 
   return (
     <div className="grid-map-container">
-      <div className="left-container"></div> {/* This will push the grid container to the right */}
+      <div className="left-container">
+        <h2>Please select the grids containing the drone</h2>
+      </div>
       <div className="grid-container">
         <div className="grid-map">
           <img src={`${process.env.PUBLIC_URL}/image/map.png`} alt="Map" className="map-image" />

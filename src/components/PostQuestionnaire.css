@@ -1,0 +1,91 @@
+.post-questionnaire-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.post-questionnaire-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.post-questionnaire-note {
+  font-size: 16px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.post-question-container {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.post-question-prompt {
+  font-size: 18px;
+  margin-bottom: 2px;
+  text-align: left;
+}
+
+.post-rating-scale {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-rating-label {
+  font-size: 16px;
+  margin: 1px 0;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  flex: 1;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.post-rating-label:hover {
+  background-color: #e0e0e0;
+}
+
+.post-rating-input {
+  display: none;
+}
+
+.post-rating-input:checked + .post-rating-value {
+  background-color: #007aff;
+  color: white;
+
+}
+
+.post-rating-value {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  line-height: 30px;
+}
+
+button {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007aff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005bb5;
+}

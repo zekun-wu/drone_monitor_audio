@@ -10,7 +10,7 @@ const Calibration = ({ onFinish }) => {
 
   return (
     <div className="calibration-page">
-      <h2>Calibration</h2>
+      <h1>Calibration</h1>
       {/* Add any calibration-related elements here */}
     </div>
   );
