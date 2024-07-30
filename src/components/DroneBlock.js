@@ -22,7 +22,6 @@ import elapsedIcon from './icons/elapsed.png';
 
 const DroneBlock = ({ droneNumber, isFrozen, latestData, alarm, alarmInfo, sceneCounter, interval }) => {
   const [isBlinking, setIsBlinking] = useState(false);
-
   useEffect(() => {
     let criticalTime = Number(alarmInfo[1]);
     if (isNaN(criticalTime)) {

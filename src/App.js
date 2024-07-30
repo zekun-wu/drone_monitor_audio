@@ -20,14 +20,18 @@ function App() {
   const [droneData, setDroneData] = useState({});
   const [allDronesCurrentData, setAllDronesCurrentData] = useState([]);
   const [spacebarTimestamps, setSpacebarTimestamps] = useState([]);
+  const [gridSubmitResults, setGridSubmitResults] = useState([]);
   const [isRestPeriod, setIsRestPeriod] = useState(false);
   const [showGridMap, setShowGridMap] = useState(false);
+
+  // test
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [sceneCounter, setSceneCounter] = useState(1);
+  const [sceneCounter, setSceneCounter] = useState(4);
   const [interval, setIntervalCount] = useState(1);
-  const [trial, setTrialCount] = useState(19);
+  const [trial, setTrialCount] = useState(75);
   const final_task = 4;
   const sub_task = 20;
+
   const [taskData, setTaskData] = useState([]);
   const [selectedGrids, setSelectedGrids] = useState(new Set());
   const [userTrials, setUserTrials] = useState({});
@@ -158,7 +162,15 @@ function App() {
 
   const handleQuestionnaireSubmit = (currentResult) => {
     setResults((prevResults) => {
-      const updatedResults = [...prevResults, currentResult];
+      const updatedResults = [
+        ...prevResults,
+        {
+          ...currentResult,         
+          trial: calculatedTrialNumber,
+          interval: interval,
+          task: sceneCounter
+        }
+      ];
       return updatedResults;
     });
     setShowQuestionnaire(false);
@@ -184,6 +196,17 @@ function App() {
 
   const handleGridSubmit = (selectedGrids) => {
     console.log('Selected grids:', selectedGrids);
+    // Save grid submit results with the same metadata structure
+    setGridSubmitResults((prevResults) => [
+      ...prevResults,
+      {
+        selectedGrids: Array.from(selectedGrids),
+        trial: calculatedTrialNumber,
+        interval: interval,
+        task: sceneCounter
+      }
+    ]);
+
     setShowGridMap(false);
     if(trial % sub_task === 0){
       if (sceneCounter === final_task) {
@@ -245,6 +268,10 @@ function App() {
     setIntervalCount(1); // reset interval count when scene changes
   }, [sceneCounter]);
 
+useEffect(()=>{
+  console.log('spacebarTimestamps',spacebarTimestamps)
+},[spacebarTimestamps])
+
   return (
     <div className="App">
       <div className={loggedIn && !showQuestionnaire ? "app_container no-scroll" : "app_container"}>
@@ -255,7 +282,7 @@ function App() {
             {calibration ? (
               <Calibration />
             ) : allTaskEnded ? (
-              <End results={results} spacebarTimestamps={spacebarTimestamps} />
+              <End results={results} spacebarTimestamps={spacebarTimestamps} gridSubmitResults={gridSubmitResults} />
             ) : showGridMap ? (
               <GridMap 
                 onGridSubmit={handleGridSubmit}

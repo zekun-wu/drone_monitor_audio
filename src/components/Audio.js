@@ -45,7 +45,7 @@ const Audio = ({ alarms, alarmInfo, currentIndex }) => {
 
       if (droneNumber && iconType) {
         const text = `Drone ${droneNumber}, ${iconType}.`;
-        console.log("Speaking text:", text);
+        // console.log("Speaking text:", text);
         speak(text);
         lastTriggeredIndex.current = currentIndex; // Update the last triggered index
       }
@@ -56,7 +56,7 @@ const Audio = ({ alarms, alarmInfo, currentIndex }) => {
     const synth = window.speechSynthesis;
     const utterance = new SpeechSynthesisUtterance(text);
     synth.speak(utterance);
-    console.log("Speaking:", text);
+    // console.log("Speaking:", text);
   };
 
   return null; // This component does not render anything visually

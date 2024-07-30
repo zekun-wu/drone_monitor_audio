@@ -1,13 +1,20 @@
 import React from 'react';
 import './End.css';
 
-const End = ({ results, spacebarTimestamps }) => {
+const End = ({ results, spacebarTimestamps, gridSubmitResults }) => {
   const handleDownload = () => {
     // Merge spacebarTimestamps with existing results
     const mergedResults = {
       ...results,
-      spacebar_timestamps: spacebarTimestamps.map(({ timestamp, interval, task }) => ({
+      spacebar_timestamps: spacebarTimestamps.map(({ timestamp, trial, interval, task }) => ({
         timestamp,
+        trial, // Ensure the trial field is included here
+        interval,
+        task
+      })),
+      grid_submit_results: gridSubmitResults.map(({ selectedGrids, trial, interval, task }) => ({
+        selectedGrids,
+        trial,
         interval,
         task
       })),

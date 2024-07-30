@@ -204,12 +204,18 @@ const DroneMonitor = ({  key, trial, calculatedTrial, taskStarted, sceneCounter,
 
   const handleSpacebarPress = (event) => {
     if (event.code === 'Space') {
+      // Play sound feedback
+      const audio = new window.Audio(`${process.env.PUBLIC_URL}/sound/beep.mp3`);
+      audio.play();
+
+      // Save timestamp and other data
       setSpacebarTimestamps((prevTimestamps) => [
-        ...prevTimestamps, 
+        ...prevTimestamps,
         {
-          timestamp:currentIndex,
-          interval:parseInt(currentIndex/(24*15))+1,
-          task:sceneCounter
+          timestamp: currentIndex,
+          trial: calculatedTrial,
+          interval: interval,
+          task: sceneCounter
         }
       ]);
     }
@@ -220,7 +226,8 @@ const DroneMonitor = ({  key, trial, calculatedTrial, taskStarted, sceneCounter,
     return () => {
       window.removeEventListener('keydown', handleSpacebarPress);
     };
-  }, []);
+  }, [currentIndex, calculatedTrial, interval, sceneCounter]);
+  
 
 
   return (
