@@ -32,9 +32,7 @@ const DroneBlock = ({ droneNumber, isFrozen, latestData, alarm, alarmInfo, scene
     const intervals = [
       { start: criticalTime, end: criticalTime + 24 },
       { start: criticalTime + 24 * 2, end: criticalTime + 24 * 3 },
-      { start: criticalTime + 24 * 4, end: criticalTime + 24 * 5 },
-      { start: criticalTime + 24 * 6, end: criticalTime + 24 * 7 },
-      { start: criticalTime + 24 * 8, end: criticalTime + 24 * 9 },
+      { start: criticalTime + 24 * 4, end: criticalTime + 24 * 5 }
     ];
   
     const shouldBlink = intervals.some(interval => latestData['time'] > interval.start && latestData['time'] < interval.end);

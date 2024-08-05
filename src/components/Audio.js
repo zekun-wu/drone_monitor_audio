@@ -7,7 +7,7 @@ const Audio = ({ alarms, alarmInfo, currentIndex }) => {
     if (!alarmInfo) return;
 
     const [alarmType, noCritical] = alarmInfo;
-    const alarmTimestamps = [noCritical * 24, (noCritical + 2) * 24, (noCritical + 4) * 24, (noCritical + 6) * 24];
+    const alarmTimestamps = [noCritical * 24, (noCritical + 2) * 24, (noCritical + 4) * 24];
 
     // console.log("Current index:", currentIndex);
     // console.log("Alarm info:", alarmInfo);

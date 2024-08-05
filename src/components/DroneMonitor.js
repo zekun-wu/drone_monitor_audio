@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import './DroneMonitor.css';
 import droneIconImg from './icons/zone/fly.png';
 
-const DroneMonitor = ({  key, trial, calculatedTrial, taskStarted, sceneCounter, currentIndex, currentData, setSpacebarTimestamps, interval}) => {
+const DroneMonitor = ({ trial, calculatedTrial, taskStarted, sceneCounter, currentIndex, currentData, setSpacebarTimestamps, interval}) => {
   // console.log('currentIndex',currentIndex)
   // console.log('trial',trial)
   // console.log('currentData',currentData)

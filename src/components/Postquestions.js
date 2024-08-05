@@ -6,10 +6,8 @@ const questions = [
   "The AI system's alerts were clear and easy to understand.",
   "I felt confident in the AI system's capabilities.",
   "The AI system was reliable in its performance.",
-  "The AI system's alerts helped me make accurate decisions.",
   "I trusted the AI system's recommendations.",
   "I was able to understand why the AI system provided certain alerts.",
-  "The AI system's alerts were timely and appropriately frequent.",
   "The AI system sometimes gave incorrect alerts."
 ];
 
@@ -21,13 +19,13 @@ const options = [
   { value: 5, label: "Strongly agree" }
 ];
 
-const PostQuestionnaire = forwardRef(({ onSubmit }, ref) => {
+const PostQuestionnaire = forwardRef(({ onSubmit, sceneCounter }, ref) => {
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
 
   useImperativeHandle(ref, () => ({
     handleSubmit() {
       if (answers.every(answer => answer !== null)) {
-        onSubmit(answers);
+        onSubmit({ answers, sceneCounter });
       } else {
         alert('Please answer all the questions before submitting.');
       }
@@ -40,11 +38,19 @@ const PostQuestionnaire = forwardRef(({ onSubmit }, ref) => {
     setAnswers(updatedAnswers);
   };
 
+  const handleSubmitButtonClick = () => {
+    if (answers.every(answer => answer !== null)) {
+      onSubmit({ answers, sceneCounter });
+    } else {
+      alert('Please answer all the questions before submitting.');
+    }
+  };
+
   return (
     <div className="post-questionnaire-container">
-      <h2 className="post-questionnaire-title">Post-Task Questionnaire</h2>
+      <h2 className="post-questionnaire-title">Post-Experiment Questionnaire</h2>
       <p className="post-questionnaire-note">
-        Please rate your agreement with the following statements, where 1 means "Strongly disagree" and 5 means "Strongly agree".
+        Please rate your agreement with the following statements, where 1 means "Strongly disagree", 2 means "Disagree", 3 means "Neutral", 4 means "Agree" and 5 means "Strongly agree".
       </p>
       {questions.map((question, index) => (
         <div key={index} className="post-question-container">
@@ -66,6 +72,11 @@ const PostQuestionnaire = forwardRef(({ onSubmit }, ref) => {
           </div>
         </div>
       ))}
+      <div className="button-container">
+        <button type="submit" onClick={handleSubmitButtonClick}>
+          Submit and Proceed
+        </button>
+      </div>
     </div>
   );
 });

@@ -29,13 +29,15 @@ function App() {
 
   // test
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [sceneCounter, setSceneCounter] = useState(4);
-  const [interval, setIntervalCount] = useState(19);
-  const [trial, setTrialCount] = useState(79);
-  const [practiceTrial, setPractiseTrialCount] = useState(0);
+  const [sceneCounter, setSceneCounter] = useState(0);
+  const [interval, setIntervalCount] = useState(1);
+  const [trial, setTrialCount] = useState(0);
+
   const final_task = 4;
   const sub_task = 20;
   const practiceTrialsList = [23, 1, 35, 41, 6, 50, 70, 32]; 
+  const [practiceTrial, setPractiseTrialCount] = useState(0);
+  const [practiceMode, setPracticeMode] = useState(false);
 
   const [taskData, setTaskData] = useState([]);
   const [selectedGrids, setSelectedGrids] = useState(new Set());
@@ -43,7 +45,7 @@ function App() {
   const [username, setUsername] = useState('');
   const [calculatedTrialNumber, setCalculatedTrialNumber] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [practiceMode, setPracticeMode] = useState(false);
+ 
 
   function padTrialNumber(trial) {
     return String(trial).padStart(4, '0');
@@ -211,12 +213,12 @@ function App() {
     }
     else{
       if(trial % sub_task === 0){
-        if (sceneCounter === final_task) {
+        if(sceneCounter === 1){
+          setCalibration(true)
+        }
+        else {
           // setallTaskEnded(true);
           setShowPostQuestionnaire(true);
-        } else {
-          setCalibration(true); // Transition to Calibration page
-          setEndQuestionnaire(true);
         }
       } else {
         setIsRestPeriod(true);
@@ -264,11 +266,11 @@ function App() {
     }
     else{
       if(trial % sub_task === 0){
-        if (sceneCounter === final_task) {
-          // setallTaskEnded(true);
+        if(sceneCounter===1){
+          setCalibration(true)
+        }
+        else{
           setShowPostQuestionnaire(true)
-        } else {
-          setCalibration(true); // Transition to Calibration page
         }
       } else {
         setIsRestPeriod(true);
@@ -284,40 +286,48 @@ function App() {
     }
   };
 
-  const handlePostQuestionnaireSubmit = (postQuestionnaireResults) => {
-    setResults((prevResults) => [
-      ...prevResults,
-      {
-        postQuestionnaireResults,
-        interval,
-        task: sceneCounter,
-        trial: calculatedTrialNumber
-      }
-    ]);
+  const handlePostQuestionnaireSubmit = (postQuestionnaireResult) => {
+    setResults((prevResults) => {
+      const updatedResults = [
+        ...prevResults,
+        {
+          ...postQuestionnaireResult,
+          task: sceneCounter
+        }
+      ];
+      return updatedResults;
+    });
     setShowPostQuestionnaire(false);
-    setallTaskEnded(true);
+    if (sceneCounter === final_task) {
+      setallTaskEnded(true);
+    } else {
+      setCalibration(true); // Transition to Calibration page
+    }
   };
 
   useEffect(() => {
     if (taskStarted && currentIndex !== 0 && (currentIndex + 1) % droneData[0].timestamps.length === 0) {
-      console.log('currentIndex', currentIndex)
-      console.log('practiceMode',practiceMode)
-      console.log('calculatedTrialNumber',calculatedTrialNumber)
+      // console.log('currentIndex', currentIndex)
+      // console.log('practiceMode',practiceMode)
+      // console.log('calculatedTrialNumber',calculatedTrialNumber)
       if(practiceMode){
         const trialData = taskData.find(data => data['Trial Number'] === practiceTrialsList[practiceTrial]);
         if (trialData) {
-          console.log('trialData in practise Mode',trialData)
+          // console.log('trialData in practise Mode',trialData)
           if (trialData.Question === 1) {
+            setTaskStarted(false);
             setShowQuestionnaire(true);
-            setTaskStarted(false);
           } else if (trialData.Map === 1) {
-            setShowGridMap(true);
             setTaskStarted(false);
+            setShowGridMap(true);
           } else {
             if(practiceTrial === practiceTrialsList.length - 1){
+              setTaskStarted(false);
               setCalibration(true); // Transition to Calibration page
               setEndQuestionnaire(true);
             } else {
+              setTaskStarted(false);
+
               setIsRestPeriod(true);
               setTimeout(() => {
                 setIsRestPeriod(false);
@@ -337,21 +347,21 @@ function App() {
         setTaskStarted(false);
         if (trialData) {
           if (trialData.Question === 1) {
+            setTaskStarted(false);
             setShowQuestionnaire(true);
-            setTaskStarted(false);
           } else if (trialData.Map === 1) {
-            setShowGridMap(true);
             setTaskStarted(false);
+            setShowGridMap(true);
           } else {
             if(trial % sub_task === 0){
-              if (sceneCounter === final_task) {
-                // setallTaskEnded(true);
+              if(sceneCounter===1){
+                setCalibration(true)
+              }
+              else{
                 setShowPostQuestionnaire(true);
-              } else {
-                setCalibration(true); // Transition to Calibration page
-                setEndQuestionnaire(true);
               }
             } else {
+              setTaskStarted(false);
               setIsRestPeriod(true);
               setTimeout(() => {
                 setIsRestPeriod(false);
@@ -365,15 +375,66 @@ function App() {
           }
         }
     }
-  }}, [taskStarted, currentIndex, droneData, taskData, trial,practiceTrial]);
+  }
+  // console.log('sceneCounter',sceneCounter)
+}, [taskStarted, currentIndex, droneData, taskData, trial, practiceTrial]);
 
   useEffect(() => {
     setIntervalCount(1); // reset interval count when scene changes
   }, [sceneCounter]);
 
-useEffect(()=>{
-  console.log('spacebarTimestamps',spacebarTimestamps)
-},[spacebarTimestamps])
+// useEffect(()=>{
+//   console.log('spacebarTimestamps',spacebarTimestamps)
+// },[spacebarTimestamps])
+
+
+const notifyServerRef = useRef();
+
+// Notify server function
+const notifyServer = async (url, data) => {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    const responseData = await response.json();
+    // console.log(responseData);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+useEffect(() => {
+  notifyServerRef.current = notifyServer;
+}, []);
+
+useEffect(() => {
+  const url = 'http://localhost:5000';
+  const data = {
+    username,
+    taskStarted,
+    sceneCounter,
+    interval,
+    showQuestionnaire,
+    showGridMap,
+    isRestPeriod,
+    calibration,
+    allTaskEnded
+  };
+  console.log('notifying data:',data)
+  console.log('currentIndex',currentIndex)
+  
+  notifyServerRef.current(url, data);
+}, [taskStarted,sceneCounter,interval,showPostQuestionnaire,showGridMap,isRestPeriod,calibration,allTaskEnded]);
+
 
 return (
   <div className="App">
@@ -386,8 +447,9 @@ return (
             <Calibration />
           ) : showPostQuestionnaire ? (
             <PostQuestionnaire
-              ref={postQuestionnaireRef}
-              onSubmit={handlePostQuestionnaireSubmit}
+            ref={postQuestionnaireRef}
+            onSubmit={handlePostQuestionnaireSubmit}
+            sceneCounter={sceneCounter}
             />
           ) : allTaskEnded ? (
             <End results={results} spacebarTimestamps={spacebarTimestamps} gridSubmitResults={gridSubmitResults} />
@@ -406,7 +468,6 @@ return (
             <RestPage />
           ) : dataLoaded ? ( // Only render DroneMonitor if data is loaded
             <DroneMonitor
-              key={sceneCounter}
               trial={trial}
               calculatedTrial={calculatedTrialNumber}
               taskStarted={taskStarted}
@@ -428,12 +489,8 @@ return (
                 </button>
               ) : calibration ? (
                 <button onClick={handleCalibration}>Next</button>
-              ) : showPostQuestionnaire ? (
-                <button type="submit" onClick={() => postQuestionnaireRef.current && postQuestionnaireRef.current.handleSubmit()}>
-                  Submit and Proceed
-                </button>
-              ) : (
-                !allTaskEnded && !taskStarted && !showGridMap && !isRestPeriod && (
+              ) :  (
+                !allTaskEnded && !taskStarted && !showGridMap && !isRestPeriod && !showPostQuestionnaire &&(
                   <button onClick={() => setTaskStarted(true)}>Start</button>
                 )
               )}
